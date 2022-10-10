@@ -1,0 +1,37 @@
+<div id="fps"></div>
+<canvas id="canvas" width=300 height=300></canvas>
+
+<script>
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+
+    let filterStrength = 20;
+    let frameTime = 0, lastLoop = Date.now(), thisLoop;
+    let fpsOut = document.getElementById('fps');
+    setInterval(() => {
+        fpsOut.innerHTML = (1000 / frameTime).toFixed(1) + " fps";
+    }, 1000);
+
+    const gameLoop = () => {
+        let thisFrameTime = (thisLoop = Date.now()) - lastLoop;
+        frameTime += (thisFrameTime - frameTime) / filterStrength;
+        lastLoop = thisLoop;
+
+        ctx.clearRect(0, 0, 300, 300);
+        for (let i = 0; i < 500; i++) {
+            ctx.drawImage(ss, 0, 0);
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    let ss = new Image();
+    ss.onload = (e) => {
+        let offscr = new OffscreenCanvas(100, 100);
+        let offscrCtx = offscr.getContext('2d');
+        offscrCtx.drawImage(ss, 0, 0);
+
+        gameLoop();
+    };
+    ss.src = "1064-300x300.jpg";
+</script>
